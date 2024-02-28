@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/test
+    username: root
+    password: dnfwlq82@@
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+      use-new-id-generator-mappings: false
+    properties:
+      dialect: org.hibernate.dialect.MariaDB53Dialect
+      hibernate:
+        format_sql: true
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  jwt:
+    secret: thejwtsecretkeyisinformationthatmustbehiddenandmustbecomposedofastringof516bitsormoretopreventattackssuchasbruteforce
+    token:
+      access-expiration-time: 43200000 # 12 hour
+      refresh-expiration-time: 604800000 # 1 week
