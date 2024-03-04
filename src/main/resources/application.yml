@@ -30,7 +30,6 @@ spring:
       enabled: true
 
   jwt:
-    secret: thejwtsecretkeyisinformationthatmustbehiddenandmustbecomposedofastringof516bitsormoretopreventattackssuchasbruteforce
-    token:
-      access-expiration-time: 43200000 # 12 hour
-      refresh-expiration-time: 604800000 # 1 week
+    secret-key: thejwtsecretkeyisinformationthatmustbehiddenandmustbecomposedofastringof516bitsormoretopreventattackssuchasbruteforce
+    access-token-expiration-time: 43200000 # 12 hour
+    refresh-token-expiration-time: 604800000 # 1 week

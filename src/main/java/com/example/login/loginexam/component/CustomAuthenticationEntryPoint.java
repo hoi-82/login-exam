@@ -1,4 +1,4 @@
-package com.example.login.loginexam.security.component;
+package com.example.login.loginexam.component;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
