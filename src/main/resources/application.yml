@@ -1,6 +1,10 @@
 server:
   port: 8080
 
+logging:
+  level:
+    com.example.login.loginexam: debug
+
 spring:
   redis:
     host: localhost
@@ -8,7 +12,7 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/test
+    url: jdbc:mariadb://localhost:3306/login_test
     username: root
     password: dnfwlq82@@
 
@@ -23,13 +27,17 @@ spring:
       hibernate:
         format_sql: true
 
+  output:
+    ansi:
+      enabled: ALWAYS
+
   devtools:
     livereload:
       enabled: true
     restart:
       enabled: true
 
-  jwt:
-    secret-key: thejwtsecretkeyisinformationthatmustbehiddenandmustbecomposedofastringof516bitsormoretopreventattackssuchasbruteforce
-    access-token-expiration-time: 43200000 # 12 hour
-    refresh-token-expiration-time: 604800000 # 1 week
+jwt:
+  secret-key: thejwtsecretkeyisinformationthatmustbehiddenandmustbecomposedofastringof516bitsormoretopreventattackssuchasbruteforce
+  access-token-expiration-time: 43200000 # 12 hour
+  refresh-token-expiration-time: 604800000 # 1 week

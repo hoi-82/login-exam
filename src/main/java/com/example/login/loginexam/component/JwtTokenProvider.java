@@ -54,7 +54,7 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     // 토큰 분석 후 정보 추출
-    public Authentication getAuthentication(String token) throws Exception {
+    public Authentication getAuthentication(String token) {
         String emailAddress = Jwts.parser().verifyWith(signingKey).build()
                 .parseSignedClaims(token).getPayload().getSubject();
 

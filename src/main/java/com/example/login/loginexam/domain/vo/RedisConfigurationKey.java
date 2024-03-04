@@ -2,11 +2,11 @@ package com.example.login.loginexam.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.validation.annotation.Validated;
 
 @Getter
-@Validated
+@Setter
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "spring.redis")
 public class RedisConfigurationKey {
