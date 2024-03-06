@@ -1,11 +1,9 @@
 package com.example.login.loginexam.config;
 
-import com.example.login.loginexam.component.CustomAuthenticationEntryPoint;
 import com.example.login.loginexam.component.JwtTokenProvider;
 import com.example.login.loginexam.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jooq.DefaultConfigurationCustomizer;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +12,13 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.*;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,11 +30,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final String GENERATED_PASSWORD = "testpassword";
+    private static final String GENERATED_PASSWORD = "test_password";
     private static final String[] ALL_PERMIT_REQUEST_MATCHERS = {"/", "/home", "/api/v1/sign/**"};
     private static final String[] ADMIN_REQUEST_MATCHERS = {"**/admin/**"};
 
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+//    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
@@ -62,9 +61,9 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(ALL_PERMIT_REQUEST_MATCHERS).permitAll()
+                        .requestMatchers(ALL_PERMIT_REQUEST_MATCHERS).permitAll()
                         .requestMatchers(ADMIN_REQUEST_MATCHERS).hasRole("ADMIN")
-//                        .anyRequest().authenticated()
+                        .anyRequest().authenticated()
                                 .anyRequest().permitAll()
                 )
 //                .exceptionHandling(exception -> exception
