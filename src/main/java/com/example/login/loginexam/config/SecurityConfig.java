@@ -32,8 +32,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private static final String GENERATED_PASSWORD = "testpassword";
-    private static final String[] REQUEST_MATCHERS = {"/", "/home"};
-    private static final String[] ADMIN_REQUEST_MATCHERS = {"/admin/**"};
+    private static final String[] ALL_PERMIT_REQUEST_MATCHERS = {"/", "/home", "/api/v1/sign/**"};
+    private static final String[] ADMIN_REQUEST_MATCHERS = {"**/admin/**"};
 
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final JwtTokenProvider jwtTokenProvider;
@@ -62,14 +62,15 @@ public class SecurityConfig {
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(REQUEST_MATCHERS).permitAll()
+//                        .requestMatchers(ALL_PERMIT_REQUEST_MATCHERS).permitAll()
                         .requestMatchers(ADMIN_REQUEST_MATCHERS).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
 //                .exceptionHandling(exception -> exception
 //                        .authenticationEntryPoint(customAuthenticationEntryPoint)
 //                )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 ;
 
         return http.build();
@@ -90,8 +91,7 @@ public class SecurityConfig {
     public static RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
         hierarchy.setHierarchy("ROLE_ADMIN > ROLE_STAFF\n" +
-                "ROLE_STAFF > ROLE_USER\n" +
-                "ROLE_USER > ROLE_GUEST");
+                "ROLE_STAFF > ROLE_USER");
         return hierarchy;
     }
 }

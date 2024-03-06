@@ -3,12 +3,11 @@ package com.example.login.loginexam.domain.entity;
 import com.example.login.loginexam.domain.dto.RegisterUserDto;
 import com.example.login.loginexam.domain.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,11 +15,11 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "user_id")
     private Long id;
 
     @NotNull(message = "사용자 이메일 주소가 입력되지 않았습니다.")
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String emailAddress;
 
     @NotNull(message = "사용자 명이 입력되지 않았습니다.")
@@ -47,6 +46,12 @@ public class User {
 
     private boolean enabled; // 계정 활성화
 
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public User(String emailAddress, String userName, String password, Role role, boolean tos, boolean pic, boolean expired, boolean locked, boolean credentialExpired, boolean enabled) {
         this.emailAddress = emailAddress;
@@ -62,7 +67,7 @@ public class User {
     }
 
     // 사용자 등록 DTO to Entity
-    public static User registerUserToEntity(RegisterUserDto rgDto) throws Exception {
+    public static User dtoToEntity(RegisterUserDto rgDto) throws Exception {
         return User.builder()
                 .emailAddress(rgDto.emailAddress())
                 .userName(rgDto.userName())

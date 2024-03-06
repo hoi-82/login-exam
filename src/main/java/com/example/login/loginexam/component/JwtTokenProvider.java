@@ -4,10 +4,13 @@ import com.example.login.loginexam.domain.entity.hash.RefreshToken;
 import com.example.login.loginexam.domain.vo.JwtConfigurationKey;
 import com.example.login.loginexam.repository.JwtCachingRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class JwtTokenProvider implements InitializingBean {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtCachingRepository jwtCachingRepository;
@@ -64,15 +68,17 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public boolean validateToken(String token) {
-        boolean status = false;
-
         try {
+            Jwts.parser().verifyWith(signingKey).build().parseSignedClaims(token);
 
-        } catch(Exception e) {
-            return false;
+            return true;
+        } catch(ExpiredJwtException e) {
+            log.warn("[jwt token is expired] token -> {}", token);
+        } catch(JwtException e) {
+            log.error("[jwt token error] token -> {}", token);
         }
 
-        return status;
+        return false;
     }
 
     private String createToken(Authentication authentication, Long expirationTime) {

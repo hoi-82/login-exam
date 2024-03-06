@@ -1,9 +1,9 @@
 package com.example.login.loginexam.filter;
 
 import com.example.login.loginexam.component.JwtTokenProvider;
-import com.example.login.loginexam.domain.enums.JwtExceptionStatus;
-import com.example.login.loginexam.exception.JwtAuthenticationException;
+import com.example.login.loginexam.domain.enums.exception.JwtExceptionStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.IncorrectClaimException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,10 +42,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } else {
                 responseJwtError(response, JwtExceptionStatus.INVALID_BEARER_TOKEN);
             }
-        } catch(IncorrectClaimException e) {
+        } catch (IncorrectClaimException e) {
             responseJwtError(response, JwtExceptionStatus.INVALID_TOKEN);
         } catch (UsernameNotFoundException e) {
             responseJwtError(response, JwtExceptionStatus.CAN_NOT_FIND_USER);
+        } catch (ExpiredJwtException e) {
+            responseJwtError(response, JwtExceptionStatus.EXPIRATION_TOKEN);
         }
     }
 

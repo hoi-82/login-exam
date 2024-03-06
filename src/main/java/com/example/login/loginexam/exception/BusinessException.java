@@ -1,18 +1,20 @@
 package com.example.login.loginexam.exception;
 
 import com.example.login.loginexam.domain.enums.exception.JwtExceptionStatus;
+import com.example.login.loginexam.domain.enums.exception.ServerExceptionStatus;
 import lombok.Getter;
 
 @Getter
-public class JwtAuthenticationException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
-    private JwtExceptionStatus status;
+    private ServerExceptionStatus status;
 
-    public JwtAuthenticationException() {
+    public BusinessException() {
         super();
+        status = ServerExceptionStatus.INTERNAL_ERROR;
     }
 
-    public JwtAuthenticationException(JwtExceptionStatus status) {
+    public BusinessException(ServerExceptionStatus status) {
         super(status.getMessage());
         this.status = status;
     }
